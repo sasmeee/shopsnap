@@ -54,9 +54,12 @@ const EXTRACT_PROMPT = `Extract customer orders from this WhatsApp chat text.
 Rules:
 - The HEADER line is the chat title. If it is a phone number, put it in "phone". If it is a name, put it in "chat_name". Never invent a phone or name.
 - One order per purchase. A chat can contain several orders.
-- "total" is what the customer owes for that order, in rupees.
+- Use the shop's confirmed lines (the ones with "=" and a number) for items. Example: "Rice 5kg x2 = 3600" means name "Rice 5kg", qty 2, line_total 3600.
+- line_total is the number after "=", copied as is. Do not divide anything.
+- In the customer's lines, "2k" or "3 k" after an item means a count of 2 or 3. It never means thousand.
+- "total" is the "Total" amount the shop states, in rupees.
 - pay_status: "paid" if the chat says paid, "partial" if only part is paid, "unpaid" if it says not paid or owes, "unknown" if the chat does not say.
-- qty is 1 if not stated. price is 0 if not stated.
+- qty is 1 if not stated.
 - If there is no order, return an empty orders list.
 
 Chat:

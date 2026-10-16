@@ -2,8 +2,12 @@ import { z } from "zod";
 
 export const ItemSchema = z.object({
   name: z.string().describe("Item name as written in the chat"),
-  qty: z.number().describe("Quantity, 1 if not stated"),
-  price: z.number().describe("Price per unit in rupees, 0 if not stated"),
+  qty: z.number().describe("Quantity, 1 if not stated. 'x2' means 2"),
+  line_total: z
+    .number()
+    .describe(
+      "Amount for this whole line, copied from the shop's message after '=', in rupees. 0 if no amount shown",
+    ),
 });
 
 export const OrderSchema = z.object({
@@ -28,7 +32,8 @@ export const ExtractionSchema = z.object({
   orders: z.array(OrderSchema),
 });
 
-export type Item = z.infer<typeof ItemSchema>;
+export type RawItem = z.infer<typeof ItemSchema>;
+export type Item = { name: string; qty: number; price: number };
 export type ExtractedOrder = z.infer<typeof OrderSchema>;
 export type Extraction = z.infer<typeof ExtractionSchema>;
 
