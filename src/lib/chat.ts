@@ -23,6 +23,31 @@ export function toItems(raw: RawItem[]): Item[] {
   }));
 }
 
+// Every amount the model returns must appear in the transcript.
+// Catches invented numbers that still add up.
+export function checkGrounded(
+  transcript: string,
+  o: { total: number; items: RawItem[] },
+): string[] {
+  const found = transcript.match(/\d[\d,]*(?:\.\d+)?/g) ?? [];
+  const nums = new Set(found.map((n) => Number(n.replace(/,/g, ""))));
+  const errors: string[] = [];
+
+  const lineSum = o.items.reduce((s, i) => s + i.line_total, 0);
+  const totalOk = nums.has(o.total) || Math.abs(lineSum - o.total) <= 1;
+  if (o.total > 0 && !totalOk) {
+    errors.push(`Total ${o.total} not found in chat text`);
+  }
+  for (const i of o.items) {
+    if (i.line_total > 0 && !nums.has(i.line_total)) {
+      errors.push(
+        `Amount ${i.line_total} for ${i.name} not found in chat text`,
+      );
+    }
+  }
+  return errors;
+}
+
 type Checkable = {
   phone: string | null;
   chat_name: string | null;

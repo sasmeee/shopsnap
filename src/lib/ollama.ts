@@ -53,14 +53,14 @@ export async function transcribeImage(base64: string): Promise<string> {
 const EXTRACT_PROMPT = `Extract customer orders from this WhatsApp chat text.
 Rules:
 - The HEADER line is the chat title. If it is a phone number, put it in "phone". If it is a name, put it in "chat_name". Never invent a phone or name.
-- One order per purchase. A chat can contain several orders.
-- Use the shop's confirmed lines (the ones with "=" and a number) for items. Example: "Rice 5kg x2 = 3600" means name "Rice 5kg", qty 2, line_total 3600.
-- line_total is the number after "=", copied as is. Do not divide anything.
+- Only use numbers that appear in the chat text. Never invent or guess an amount.
+- The shop's confirmed lines look like: <item> x<qty> = <amount>. Use them for items. name is the item, qty is the number after x, line_total is the <amount>, copied as is. Do not divide anything.
+- Each "Total" line ends one order. Make one order per "Total" line. A chat can contain several orders.
+- "total" is the amount on that order's "Total" line.
 - In the customer's lines, "2k" or "3 k" after an item means a count of 2 or 3. It never means thousand.
-- "total" is the "Total" amount the shop states, in rupees.
 - pay_status: "paid" if the chat says paid, "partial" if only part is paid, "unpaid" if it says not paid or owes, "unknown" if the chat does not say.
 - qty is 1 if not stated.
-- If there is no order, return an empty orders list.
+- If the chat has no shop line with an amount (only greetings or questions), return an empty orders list.
 
 Chat:
 `;

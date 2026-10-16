@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import sharp from "sharp";
 import { transcribeImage, extractOrders, OllamaError } from "@/lib/ollama";
-import { parseHeader, validateOrder, toItems } from "@/lib/chat";
+import { parseHeader, validateOrder, checkGrounded, toItems } from "@/lib/chat";
 import { normalizePhone } from "@/lib/phone";
 
 export const runtime = "nodejs";
@@ -59,7 +59,8 @@ export async function POST(req: NextRequest) {
         source_hash: hash,
         order_date: date,
       };
-      return { ...order, errors: validateOrder(order) };
+      const errors = [...validateOrder(order), ...checkGrounded(transcript, o)];
+      return { ...order, errors };
     });
 
     return NextResponse.json({ hash, transcript, orders });
