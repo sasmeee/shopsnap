@@ -14,7 +14,7 @@ type ExpOrder = {
   items: ExpItem[];
 };
 type Expected = { file: string; orders: ExpOrder[] };
-type GotOrder = ExpOrder & { errors: string[] };
+type GotOrder = ExpOrder & { errors: string[]; warnings: string[] };
 
 type Score = {
   right: number;
@@ -93,7 +93,9 @@ function score(exp: ExpOrder[], got: GotOrder[]): Score {
     });
     if (bad) {
       s.wrongOrders++;
-      if (!g || g.errors.length === 0) s.wrongUnflagged++;
+      if (!g || (g.errors.length === 0 && g.warnings.length === 0)) {
+        s.wrongUnflagged++;
+      }
     }
   });
   return s;

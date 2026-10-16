@@ -4,6 +4,7 @@ import sharp from "sharp";
 import { transcribeImage, extractOrders, OllamaError } from "@/lib/ollama";
 import { parseHeader, validateOrder, checkGrounded, toItems } from "@/lib/chat";
 import { normalizePhone } from "@/lib/phone";
+import { findAlias } from "@/lib/db";
 
 export const runtime = "nodejs";
 
@@ -15,6 +16,7 @@ export async function POST(req: NextRequest) {
   if (!(file instanceof File)) {
     return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
   }
+
   if (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
     return NextResponse.json({ error: "Pick a valid date" }, { status: 400 });
   }
@@ -23,11 +25,18 @@ export async function POST(req: NextRequest) {
   const hash = crypto.createHash("sha256").update(original).digest("hex");
 
   let resized: Buffer;
+
   try {
     resized = await sharp(original)
       .rotate()
-      .resize({ width: 1280, withoutEnlargement: true })
-      .jpeg({ quality: 85 })
+      .resize({
+        width: 1024,
+        withoutEnlargement: true,
+        fit: "inside",
+      })
+      .webp({
+        quality: 80,
+      })
       .toBuffer();
   } catch {
     return NextResponse.json(
@@ -43,35 +52,60 @@ export async function POST(req: NextRequest) {
 
     const hasHeader = header.phone !== null || header.chatName !== null;
 
-    const orders = extracted.map((o, idx) => {
-      const phone = hasHeader ? header.phone : normalizePhone(o.phone);
-      const chat_name = phone
+    const orders = extracted.map((order, index) => {
+      let phone = hasHeader ? header.phone : normalizePhone(order.phone);
+
+      const chatName = phone
         ? null
         : hasHeader
           ? header.chatName
-          : o.chat_name;
-      const order = {
-        ...o,
-        items: toItems(o.items),
+          : order.chat_name;
+
+      const aliasWarnings: string[] = [];
+
+      if (!phone && chatName) {
+        const aliasedPhone = findAlias(chatName);
+
+        if (aliasedPhone) {
+          phone = aliasedPhone;
+          aliasWarnings.push(
+            `phone ${aliasedPhone} was filled from saved chat name "${chatName}". Make sure it is the right customer`,
+          );
+        }
+      }
+
+      const normalizedOrder = {
+        ...order,
+        items: toItems(order.items),
         phone,
-        chat_name,
-        order_idx: idx,
+        chat_name: chatName,
+        order_idx: index,
         source_hash: hash,
         order_date: date,
       };
-      const errors = [...validateOrder(order), ...checkGrounded(transcript, o)];
-      return { ...order, errors };
+
+      return {
+        ...normalizedOrder,
+        errors: validateOrder(normalizedOrder),
+        warnings: [...aliasWarnings, ...checkGrounded(transcript, order)],
+      };
     });
 
-    return NextResponse.json({ hash, transcript, orders });
-  } catch (e) {
-    if (e instanceof OllamaError && e.code === "OLLAMA_DOWN") {
+    return NextResponse.json({
+      hash,
+      transcript,
+      orders,
+    });
+  } catch (error) {
+    if (error instanceof OllamaError && error.code === "OLLAMA_DOWN") {
       return NextResponse.json(
         { error: "AI engine is not running. Start Ollama and try again." },
         { status: 503 },
       );
     }
-    console.error(e);
+
+    console.error(error);
+
     return NextResponse.json(
       { error: "Couldn't read this screenshot. Try again." },
       { status: 502 },
