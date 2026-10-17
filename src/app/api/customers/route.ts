@@ -2,9 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { listCustomers, updateNickname } from "@/lib/db";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
-
 export function GET(req: NextRequest) {
   const q = req.nextUrl.searchParams.get("q") ?? "";
   return NextResponse.json({ customers: listCustomers(q) });

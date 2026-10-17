@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
     "prepare": "husky",
     "eval": "bun scripts/eval.ts",
     "samples": "bun scripts/make-samples.ts"

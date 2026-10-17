@@ -14,12 +14,14 @@ import { useModelSetup } from "@/hooks/useModelSetup";
 import { ReportView } from "@/components/ReportView";
 import { CustomerList } from "@/components/CustomerList";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import LogoLight from "@/../public/logo.svg";
+import LogoDark from "@/../public/logo-dark.svg";
 
 function Logo() {
   return (
     <>
       <Image
-        src="/logo.svg"
+        src={LogoLight}
         alt=""
         width={36}
         height={36}
@@ -27,7 +29,7 @@ function Logo() {
         className="size-9 rounded-lg dark:hidden"
       />
       <Image
-        src="/logo-dark.svg"
+        src={LogoDark}
         alt=""
         width={36}
         height={36}

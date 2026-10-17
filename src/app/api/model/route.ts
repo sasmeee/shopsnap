@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 import { OLLAMA_URL, getModelStatus } from "@/lib/models";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
-
 // check ollama and the required models.
 export async function GET() {
   const { ollama, missing } = await getModelStatus();
