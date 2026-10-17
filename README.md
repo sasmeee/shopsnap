@@ -26,9 +26,7 @@
 
 - **Demo video:** [Watch on YouTube](https://youtu.be/XzX9DlZBfwg)
 
-<!-- After you publish the DEV post, remove these comment marks and put in the real title and link:
-- **DEV post:** [Post title](https://dev.to/sasmeee/your-post-slug)
--->
+- **DEV post:** [ShopSnap: WhatsApp order screenshots to a daily sales report, with AI that stays on your PC](https://dev.to/sasmeee/shopsnap-whatsapp-order-screenshots-to-a-daily-sales-report-with-ai-that-stays-on-your-pc-5606)
 
 ## Screenshots
 
