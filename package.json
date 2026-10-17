@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "prepare": "husky"
+    "prepare": "husky",
+    "eval": "bun scripts/eval.ts",
+    "samples": "bun scripts/make-samples.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

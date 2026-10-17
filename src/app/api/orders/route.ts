@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       );
     }
-    const chat_name = o.chat_name?.trim() || null;
+    const chat_name = o.chat_name?.trim().replace(/\s+/g, " ") || null;
 
     const problems = validateOrder({
       phone,

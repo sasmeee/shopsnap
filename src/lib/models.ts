@@ -1,6 +1,6 @@
 export const OLLAMA_URL = process.env.OLLAMA_URL || "http://localhost:11434";
 export const VISION_MODEL = process.env.VISION_MODEL || "gemma3:4b";
-export const TEXT_MODEL = process.env.TEXT_MODEL || "gemma3:4b";
+export const TEXT_MODEL = process.env.TEXT_MODEL || "qwen2.5:3b";
 
 export const REQUIRED_MODELS = Array.from(new Set([VISION_MODEL, TEXT_MODEL]));
 
