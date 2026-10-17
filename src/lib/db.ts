@@ -221,3 +221,43 @@ export function searchCustomers(q: string): CustomerRow[] {
     )
     .all({ term, like: `%${term}%` }) as CustomerRow[];
 }
+
+export type CustomerStats = CustomerRow & {
+  orders: number;
+  total: number;
+  balance: number;
+};
+
+export function listCustomers(q: string): CustomerStats[] {
+  const term = q.trim().toLowerCase();
+  return getDb()
+    .prepare(
+      `SELECT c.phone, c.nickname,
+         (SELECT group_concat(a.chat_name, ', ')
+            FROM customer_aliases a WHERE a.phone = c.phone) AS aliases,
+         (SELECT count(*) FROM orders o WHERE o.phone = c.phone) AS orders,
+         (SELECT coalesce(sum(o.total), 0)
+            FROM orders o WHERE o.phone = c.phone) AS total,
+         (SELECT coalesce(sum(o.total - o.paid_amount), 0)
+            FROM orders o WHERE o.phone = c.phone) AS balance
+       FROM customers c
+       WHERE @term = ''
+          OR lower(c.phone) LIKE @like
+          OR lower(coalesce(c.nickname, '')) LIKE @like
+          OR EXISTS (SELECT 1 FROM customer_aliases a
+                     WHERE a.phone = c.phone AND a.chat_name LIKE @like)
+       ORDER BY balance DESC, c.created_at DESC
+       LIMIT 200`,
+    )
+    .all({ term, like: `%${term}%` }) as CustomerStats[];
+}
+
+export function updateNickname(
+  phone: string,
+  nickname: string | null,
+): boolean {
+  const res = getDb()
+    .prepare("UPDATE customers SET nickname = ? WHERE phone = ?")
+    .run(nickname, phone);
+  return res.changes > 0;
+}

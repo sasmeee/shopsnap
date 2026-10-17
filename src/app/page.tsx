@@ -9,6 +9,7 @@ import { UploadPanel } from "@/components/UploadPanel";
 import { PendingList } from "@/components/PendingList";
 import { useModelSetup } from "@/hooks/useModelSetup";
 import { ReportView } from "@/components/ReportView";
+import { CustomerList } from "@/components/CustomerList";
 
 function Gate({ children }: { children: React.ReactNode }) {
   return (
@@ -115,11 +116,8 @@ export default function Home() {
         <TabsContent value="report" className="pt-4">
           <ReportView />
         </TabsContent>
-        <TabsContent
-          value="customers"
-          className="pt-4 text-sm text-muted-foreground"
-        >
-          Coming next.
+        <TabsContent value="customers" className="pt-4">
+          <CustomerList />
         </TabsContent>
       </Tabs>
     </main>
