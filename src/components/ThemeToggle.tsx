@@ -15,8 +15,7 @@ const subscribe = () => () => {};
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  // The saved theme is only known in the browser. Until then nothing is
-  // marked active, so the server HTML and the first client render match.
+  // wait for the browser theme to avoid a server render mismatch.
   const mounted = useSyncExternalStore(
     subscribe,
     () => true,
