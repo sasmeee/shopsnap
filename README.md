@@ -108,3 +108,11 @@ Next.js (App Router, TypeScript), shadcn/ui, Tailwind, SQLite (better-sqlite3), 
 - English and romanized Sinhala ("Singlish") only. Sinhala script is not tested.
 - Small models misread some chats. A forced re-read can find an order the first read missed.
 - Payment slip reading, desktop packaging and more languages are future work.
+
+## Contact
+
+Sasmitha Ashinsana, [dev.sasmitha@gmail.com](mailto:dev.sasmitha@gmail.com)
+
+## License
+
+[MIT](LICENSE)
