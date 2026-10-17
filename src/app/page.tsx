@@ -13,17 +13,28 @@ import { PendingList } from "@/components/PendingList";
 import { useModelSetup } from "@/hooks/useModelSetup";
 import { ReportView } from "@/components/ReportView";
 import { CustomerList } from "@/components/CustomerList";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 function Logo() {
   return (
-    <Image
-      src="/logo.svg"
-      alt=""
-      width={36}
-      height={36}
-      priority
-      className="size-9 rounded-lg"
-    />
+    <>
+      <Image
+        src="/logo.svg"
+        alt=""
+        width={36}
+        height={36}
+        priority
+        className="size-9 rounded-lg dark:hidden"
+      />
+      <Image
+        src="/logo-dark.svg"
+        alt=""
+        width={36}
+        height={36}
+        priority
+        className="hidden size-9 rounded-lg dark:block"
+      />
+    </>
   );
 }
 
@@ -110,7 +121,7 @@ export default function Home() {
 
   return (
     <>
-      <header className="border-b bg-background">
+      <header className="border-b bg-card">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-4">
           <div className="flex items-center gap-3">
             <Logo />
@@ -123,10 +134,13 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <Badge variant="secondary" className="gap-1">
-            <ShieldCheck className="size-3.5" aria-hidden="true" />
-            Runs on this PC
-          </Badge>
+          <div className="flex items-center gap-3">
+            <Badge variant="secondary" className="gap-1">
+              <ShieldCheck className="size-3.5" aria-hidden="true" />
+              Runs on this PC
+            </Badge>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 

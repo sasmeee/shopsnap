@@ -8,6 +8,22 @@ Turn WhatsApp order screenshots into a daily sales report. Built for small shops
 
 Built for the Hacktoberfest 2026 Open-Source AI Challenge, Week 2: Side Hustle.
 
+## Screenshots
+
+**Upload and review.** Drop screenshots, then check and fix every order before saving.
+
+![Upload and review screen](docs/upload-review.png)
+
+**Pending.** Chats that show only a name wait here until you attach a phone number.
+
+![Pending list](docs/pending.png)
+
+**Daily report.** Total sales, who has not paid, and per-customer totals.
+
+![Daily report](docs/report.png)
+
+All screenshots use fake demo data.
+
 ## What it does
 
 1. Drop WhatsApp screenshots and pick the business date.
