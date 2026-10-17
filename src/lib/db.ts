@@ -106,6 +106,14 @@ export function saveOrders(orders: NewOrder[]): {
   return { saved, duplicates };
 }
 
+// True if any order from this screenshot is already saved.
+export function hashExists(hash: string): boolean {
+  const row = getDb()
+    .prepare("SELECT 1 FROM orders WHERE source_hash = ? LIMIT 1")
+    .get(hash);
+  return row !== undefined;
+}
+
 export function findAlias(chatName: string): string | null {
   const row = getDb()
     .prepare("SELECT phone FROM customer_aliases WHERE chat_name = ?")
