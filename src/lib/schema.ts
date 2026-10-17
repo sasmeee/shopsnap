@@ -37,5 +37,6 @@ export type Item = { name: string; qty: number; price: number };
 export type ExtractedOrder = z.infer<typeof OrderSchema>;
 export type Extraction = z.infer<typeof ExtractionSchema>;
 
-const { $schema: _ignored, ...jsonSchema } = z.toJSONSchema(ExtractionSchema);
+const jsonSchema: Record<string, unknown> = z.toJSONSchema(ExtractionSchema);
+delete jsonSchema.$schema;
 export const extractionJsonSchema = jsonSchema;
