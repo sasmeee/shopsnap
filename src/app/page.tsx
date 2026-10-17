@@ -1,14 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
-import {
-  ChartColumn,
-  Clock,
-  ScanLine,
-  ShieldCheck,
-  Upload,
-  Users,
-} from "lucide-react";
+import { ChartColumn, Clock, ShieldCheck, Upload, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,9 +16,14 @@ import { CustomerList } from "@/components/CustomerList";
 
 function Logo() {
   return (
-    <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-      <ScanLine className="size-5" aria-hidden="true" />
-    </span>
+    <Image
+      src="/logo.svg"
+      alt=""
+      width={36}
+      height={36}
+      priority
+      className="size-9 rounded-lg"
+    />
   );
 }
 

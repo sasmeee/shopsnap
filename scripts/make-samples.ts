@@ -26,14 +26,24 @@ const samples: Sample[] = [
       {
         from: "them",
         time: "10:12",
-        lines: ["Aiya rice 5kg 2k ona", "sini 1kg ekak ona"],
+        lines: [
+          "Hi, I need two 5kg bags of rice.",
+          "I also need 1kg of sugar.",
+        ],
       },
       {
         from: "me",
         time: "10:15",
-        lines: ["Rice 5kg x2 = 3600", "Sini 1kg x1 = 350", "Total Rs 3950"],
+        lines: ["Rice 5kg x2 = 3600", "Sugar 1kg x1 = 350", "Total Rs 3950"],
       },
-      { from: "them", time: "10:20", lines: ["Hari bank eken damma", "paid"] },
+      {
+        from: "them",
+        time: "10:20",
+        lines: [
+          "Okay, I have transferred the money.",
+          "The payment is complete.",
+        ],
+      },
     ],
     orders: [
       {
@@ -55,7 +65,10 @@ const samples: Sample[] = [
       {
         from: "them",
         time: "09:02",
-        lines: ["Dhal 1kg 2k ona", "Coconut oil bottle ekak"],
+        lines: [
+          "Hi, I need two 1kg packs of dhal.",
+          "I also need a bottle of coconut oil.",
+        ],
       },
       {
         from: "me",
@@ -65,7 +78,10 @@ const samples: Sample[] = [
       {
         from: "them",
         time: "09:06",
-        lines: ["Passe dennam ne", "ada mage kade salli na"],
+        lines: [
+          "I'll pay you later.",
+          "I don't have enough cash at my shop today.",
+        ],
       },
     ],
     orders: [
@@ -88,14 +104,25 @@ const samples: Sample[] = [
       {
         from: "them",
         time: "11:30",
-        lines: ["Milk powder 400g 3k", "Tea 200g 2k"],
+        lines: [
+          "I need three 400g packs of milk powder.",
+          "I also need two 200g packs of tea.",
+        ],
       },
       {
         from: "me",
         time: "11:33",
-        lines: ["Milk powder x3 = 1740", "Tea 200g x2 = 760", "Total Rs 2500"],
+        lines: [
+          "Milk powder 400g x3 = 1740",
+          "Tea 200g x2 = 760",
+          "Total Rs 2500",
+        ],
       },
-      { from: "them", time: "11:40", lines: ["Paid", "Thanks aiya"] },
+      {
+        from: "them",
+        time: "11:40",
+        lines: ["I've paid the full amount.", "Thanks for your help!"],
+      },
     ],
     orders: [
       {
@@ -114,7 +141,14 @@ const samples: Sample[] = [
     file: "chat04.png",
     header: "Kamal Aiya",
     msgs: [
-      { from: "them", time: "14:10", lines: ["Soap 4k ona", "Toothpaste 2k"] },
+      {
+        from: "them",
+        time: "14:10",
+        lines: [
+          "I need four bars of soap.",
+          "I also need two tubes of toothpaste.",
+        ],
+      },
       {
         from: "me",
         time: "14:14",
@@ -123,7 +157,7 @@ const samples: Sample[] = [
       {
         from: "them",
         time: "14:15",
-        lines: ["Salli passe dennam", "thama gewwe na"],
+        lines: ["I'll pay you later.", "I haven't made the payment yet."],
       },
     ],
     orders: [
@@ -146,7 +180,10 @@ const samples: Sample[] = [
       {
         from: "them",
         time: "16:01",
-        lines: ["Rice 10kg ekak ona", "Flour 1kg 3k"],
+        lines: [
+          "I need one 10kg bag of rice.",
+          "I also need three 1kg packs of flour.",
+        ],
       },
       {
         from: "me",
@@ -156,7 +193,11 @@ const samples: Sample[] = [
       {
         from: "them",
         time: "16:10",
-        lines: ["Ada 2000 dennam", "ithuru tika passe", "half paid"],
+        lines: [
+          "I'll pay Rs 2,000 today.",
+          "I'll pay the remaining amount later.",
+          "I've made a partial payment.",
+        ],
       },
     ],
     orders: [
@@ -176,16 +217,24 @@ const samples: Sample[] = [
     file: "chat06.png",
     header: "+94 70 567 8901",
     msgs: [
-      { from: "them", time: "08:40", lines: ["Bread 2k", "Eggs 10k"] },
+      {
+        from: "them",
+        time: "08:40",
+        lines: ["I need two loaves of bread.", "I also need ten eggs."],
+      },
       {
         from: "me",
         time: "08:42",
-        lines: ["Bread x2 = 300", "Eggs x10 = 450", "Total Rs 750 paid"],
+        lines: ["Bread x2 = 300", "Eggs x10 = 450", "Total Rs 750 - Paid"],
       },
       {
         from: "them",
         time: "17:55",
-        lines: ["Aye onaa", "Sugar 2kg", "Biscuits 3k"],
+        lines: [
+          "Hi, I'd like to order a few more items.",
+          "Please add 2kg of sugar.",
+          "I also need three packets of biscuits.",
+        ],
       },
       {
         from: "me",
@@ -193,7 +242,7 @@ const samples: Sample[] = [
         lines: [
           "Sugar 2kg x1 = 700",
           "Biscuits x3 = 540",
-          "Total Rs 1240 not paid",
+          "Total Rs 1240 - Unpaid",
         ],
       },
     ],
@@ -227,22 +276,29 @@ const samples: Sample[] = [
       {
         from: "them",
         time: "12:00",
-        lines: ["Noodles 5k ona", "Soya sauce bottle ekak"],
+        lines: [
+          "I need five packets of noodles.",
+          "I also need a bottle of soy sauce.",
+        ],
       },
       {
         from: "me",
         time: "12:03",
         lines: [
           "Noodles x5 = 1000",
-          "Soya sauce x1 = 260",
-          "Total Rs 1260 paid",
+          "Soy sauce x1 = 260",
+          "Total Rs 1260 - Paid",
         ],
       },
-      { from: "them", time: "18:20", lines: ["Eka ayeth ona", "Noodles 2k"] },
+      {
+        from: "them",
+        time: "18:20",
+        lines: ["I'd like to order again.", "I need two packets of noodles."],
+      },
       {
         from: "me",
         time: "18:22",
-        lines: ["Noodles x2 = 400", "Total Rs 400 unpaid"],
+        lines: ["Noodles x2 = 400", "Total Rs 400 - Unpaid"],
       },
     ],
     orders: [
@@ -253,7 +309,7 @@ const samples: Sample[] = [
         pay_status: "paid",
         items: [
           { name: "Noodles", qty: 5, price: 200 },
-          { name: "Soya sauce", qty: 1, price: 260 },
+          { name: "Soy sauce", qty: 1, price: 260 },
         ],
       },
       {
@@ -272,21 +328,25 @@ const samples: Sample[] = [
       {
         from: "them",
         time: "13:15",
-        lines: ["Aiyo mata chilli powder 500g ekak", "ekai", "Maalu paan 3k"],
+        lines: [
+          "Hi, I need one 500g pack of chilli powder.",
+          "That's all I need.",
+          "Please add three fish buns as well.",
+        ],
       },
       {
         from: "me",
         time: "13:18",
         lines: [
           "Chilli powder 500g x1 = 650",
-          "Fish paan x3 = 210",
+          "Fish buns x3 = 210",
           "Total Rs 860",
         ],
       },
       {
         from: "them",
         time: "13:19",
-        lines: ["Hari hari, salli genath dennam"],
+        lines: ["Okay, I'll bring the money and pay you."],
       },
     ],
     orders: [
@@ -297,7 +357,7 @@ const samples: Sample[] = [
         pay_status: "unknown",
         items: [
           { name: "Chilli powder 500g", qty: 1, price: 650 },
-          { name: "Fish paan", qty: 3, price: 70 },
+          { name: "Fish buns", qty: 3, price: 70 },
         ],
       },
     ],
@@ -309,14 +369,21 @@ const samples: Sample[] = [
       {
         from: "them",
         time: "15:45",
-        lines: ["Gas cylinder ekak", "Matches packets 5k"],
+        lines: [
+          "I need one gas cylinder.",
+          "I also need five packets of matches.",
+        ],
       },
       {
         from: "me",
         time: "15:50",
         lines: ["Gas cylinder x1 = 4200", "Matches x5 = 250", "Total Rs 4450"],
       },
-      { from: "them", time: "15:51", lines: ["Hari mama passe ewannam"] },
+      {
+        from: "them",
+        time: "15:51",
+        lines: ["Okay, I'll send you the money later."],
+      },
     ],
     orders: [
       {
@@ -338,10 +405,18 @@ const samples: Sample[] = [
       {
         from: "them",
         time: "19:00",
-        lines: ["Kohomada aiya?", "Ada kade open da?"],
+        lines: ["Hi, how are you?", "Is your shop open today?"],
       },
-      { from: "me", time: "19:02", lines: ["Ow, 9 wenakan open"] },
-      { from: "them", time: "19:03", lines: ["Hari mama ennam"] },
+      {
+        from: "me",
+        time: "19:02",
+        lines: ["Yes, we're open until 9 PM."],
+      },
+      {
+        from: "them",
+        time: "19:03",
+        lines: ["Okay, I'll come by soon."],
+      },
     ],
     orders: [],
   },
@@ -389,7 +464,7 @@ function render(s: Sample): string {
     <rect width="${W}" height="80" fill="#202c33"/>
     <circle cx="50" cy="40" r="24" fill="#6b7c85"/>
     <text x="92" y="38" fill="#e9edef" font-size="24" font-weight="bold" font-family="${FONT}">${esc(s.header)}</text>
-    <text x="92" y="62" fill="#8696a0" font-size="16" font-family="${FONT}">click here for contact info</text>
+    <text x="92" y="62" fill="#8696a0" font-size="16" font-family="${FONT}">Click here for contact info</text>
     ${body}
   </svg>`;
 }
@@ -414,7 +489,7 @@ async function main() {
     ),
   );
 
-  console.log(`made ${samples.length} samples in samples/`);
+  console.log(`Made ${samples.length} sample screenshots in samples/`);
 }
 
 main();
