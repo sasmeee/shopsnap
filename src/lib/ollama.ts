@@ -36,8 +36,8 @@ async function generate(body: Record<string, unknown>, timeoutMs: number) {
 const TRANSCRIBE_PROMPT = `You are reading a screenshot of a WhatsApp chat.
 Write the text exactly as shown. Do not summarize, judge, fix or skip anything.
 Line 1 must be: HEADER: <the name or phone number shown at the top of the chat, or NONE>
-Then one line per message, from top to bottom, in the same order as on screen. Include messages on both the left and the right side.
-Keep numbers, prices, item names and "=" signs exactly.`;
+Then one line per message line, from top to bottom, in the same order as on screen. Include messages on both the left and the right side.
+Keep numbers, prices, item names and "=" signs exactly. Do not write message times.`;
 
 export async function transcribeImage(base64: string): Promise<string> {
   return generate(
@@ -54,15 +54,14 @@ export async function transcribeImage(base64: string): Promise<string> {
 const EXTRACT_PROMPT = `Extract customer orders from this WhatsApp chat text.
 Rules:
 - The HEADER line is the chat title. If it is a phone number, put it in "phone". If it is a name, put it in "chat_name". Never invent a phone or name.
-- Only use numbers that appear in the chat text. Never guess or invent an amount.
-- The shop's confirmed lines look like: <item> x<qty> = <amount>. Use them for items. name is the item, qty is the number after x, line_total is the <amount>, copied as is. Do not divide anything.
-- If the text has no line with an amount, set line_total and total to 0.
-- Each "Total" line ends one order. Make one order per "Total" line. A chat can contain several orders.
-- "total" is the amount on that order's "Total" line.
-- In the customer's request lines, "2k" or "3 k" after an item means a count of 2 or 3. It never means thousand.
-- pay_status: "paid" if the chat says paid, "partial" if only part is paid, "unpaid" if it says not paid or owes, "unknown" if the chat does not say.
+- Items come ONLY from confirmed lines that look like: <item> x<qty> = <amount>. name is the item, qty is the number after x, line_total is the <amount>, copied as is. Do not divide anything.
+- A request line without "=" and an amount is never an item. Greetings and sentences are never items.
+- In request lines, "2k" or "3 k" after an item means a count of 2 or 3. It never means thousand.
+- Never invent an amount. Only use numbers that appear in the chat text.
+- A "Total" line ends one order. Make one order per Total line. A chat can contain several orders. "total" is the amount on that Total line.
+- If there is no line with "=" and an amount, return an empty orders list.
+- pay_status: "paid" only if a line clearly says it was paid (paid, damma, bank transfer done). "partial" if only part is paid. "unpaid" if it says not paid, owes, or will pay later. "unknown" if the chat does not say.
 - qty is 1 if not stated.
-- If the chat has no order at all (only greetings or questions), return an empty orders list.
 
 Chat:
 `;

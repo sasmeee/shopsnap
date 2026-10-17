@@ -112,6 +112,7 @@ async function call(
     file,
   );
   form.append("date", "2026-10-17");
+  form.append("force", "1");
   const res = await fetch(API, { method: "POST", body: form });
   const json = (await res.json()) as {
     orders?: GotOrder[];

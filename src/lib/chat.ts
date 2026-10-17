@@ -68,3 +68,36 @@ export function validateOrder(o: Checkable): string[] {
   }
   return errors;
 }
+
+type PayStatus = "paid" | "unpaid" | "partial" | "unknown";
+
+// Never trust "paid" from a small model without proof in the chat text.
+// Only overrides when the text has exactly one kind of signal.
+export function checkPayStatus(
+  transcript: string,
+  status: PayStatus,
+): { status: PayStatus; warning?: string } {
+  const text = transcript.toLowerCase();
+  const unpaidWord =
+    /\b(unpaid|not paid|passe|nathi|owe|owes|credit|later)\b/.test(text);
+  const paidWord =
+    /\b(paid|damma|dunna|bank|transfer|transferred|deposit|deposited)\b/.test(
+      text.replace(/\b(unpaid|not paid)\b/g, ""),
+    );
+
+  if (status === "paid" && !paidWord) {
+    return unpaidWord
+      ? {
+          status: "unpaid",
+          warning: "Model said paid, but the chat says payment is pending",
+        }
+      : {
+          status: "unknown",
+          warning: "Model said paid, but no payment found in the chat",
+        };
+  }
+  if (status === "unknown" && unpaidWord && !paidWord) {
+    return { status: "unpaid" };
+  }
+  return { status };
+}

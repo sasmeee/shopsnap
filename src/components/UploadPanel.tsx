@@ -47,7 +47,7 @@ type Entry = {
   id: string;
   file: File;
   previewUrl: string;
-  status: "queued" | "reading" | "done" | "error";
+  status: "queued" | "reading" | "done" | "error" | "duplicate";
   error?: string;
   orders: ReviewOrder[];
 };
@@ -316,15 +316,20 @@ export function UploadPanel() {
   };
 
   const read = useCallback(
-    async (entry: Entry) => {
+    async (entry: Entry, force = false) => {
       patch(entry.id, { status: "reading", error: undefined });
       try {
         const form = new FormData();
         form.append("file", entry.file);
         form.append("date", date);
+        if (force) form.append("force", "1");
         const res = await fetch("/api/upload", { method: "POST", body: form });
         const json = await res.json();
         if (!res.ok) throw new Error(json.error ?? "Upload failed");
+        if (json.duplicate) {
+          patch(entry.id, { status: "duplicate", orders: [] });
+          return;
+        }
         patch(entry.id, {
           status: "done",
           orders: (json.orders as ApiOrder[]).map(toReview),
@@ -340,9 +345,9 @@ export function UploadPanel() {
   );
 
   const enqueue = useCallback(
-    (entries: Entry[]) => {
+    (entries: Entry[], force = false) => {
       for (const entry of entries) {
-        chain.current = chain.current.then(() => read(entry));
+        chain.current = chain.current.then(() => read(entry, force));
       }
     },
     [read],
@@ -374,7 +379,8 @@ export function UploadPanel() {
     (f) => f.status === "queued" || f.status === "reading",
   );
   const finished = files.filter(
-    (f) => f.status === "done" || f.status === "error",
+    (f) =>
+      f.status === "done" || f.status === "error" || f.status === "duplicate",
   ).length;
 
   async function confirm() {
@@ -464,6 +470,7 @@ export function UploadPanel() {
                 {f.status === "queued" && "Waiting"}
                 {f.status === "reading" && "Reading..."}
                 {f.status === "done" && `${f.orders.length} order(s)`}
+                {f.status === "duplicate" && "Already saved"}
                 {f.status === "error" && "Failed"}
               </Badge>
               {f.status === "error" && (
@@ -496,6 +503,21 @@ export function UploadPanel() {
             <div className="space-y-3">
               {f.status === "error" && (
                 <p className="text-sm text-destructive">{f.error}</p>
+              )}
+              {f.status === "duplicate" && (
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground">
+                    This screenshot was already saved. Skipped, so nothing is
+                    counted twice.
+                  </p>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => enqueue([f], true)}
+                  >
+                    Read again anyway
+                  </Button>
+                </div>
               )}
               {f.status === "done" && f.orders.length === 0 && (
                 <p className="text-sm text-muted-foreground">

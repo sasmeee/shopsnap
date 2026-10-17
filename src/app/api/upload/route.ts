@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import sharp from "sharp";
 import { transcribeImage, extractOrders, OllamaError } from "@/lib/ollama";
-import { parseHeader, validateOrder, checkGrounded, toItems } from "@/lib/chat";
+import {
+  parseHeader,
+  validateOrder,
+  checkGrounded,
+  toItems,
+  checkPayStatus,
+} from "@/lib/chat";
 import { normalizePhone } from "@/lib/phone";
-import { findAlias } from "@/lib/db";
+import { findAlias, hashExists } from "@/lib/db";
 
 export const runtime = "nodejs";
 
@@ -23,6 +29,12 @@ export async function POST(req: NextRequest) {
 
   const original = Buffer.from(await file.arrayBuffer());
   const hash = crypto.createHash("sha256").update(original).digest("hex");
+
+  // Same screenshot already saved: skip the slow AI read.
+  // The "Read again" button sends force=1 to bypass this.
+  if (form.get("force") !== "1" && hashExists(hash)) {
+    return NextResponse.json({ duplicate: true, hash });
+  }
 
   let resized: Buffer;
 
@@ -74,8 +86,12 @@ export async function POST(req: NextRequest) {
         }
       }
 
+      const pay = checkPayStatus(transcript, order.pay_status);
+      if (pay.warning) aliasWarnings.push(pay.warning);
+
       const normalizedOrder = {
         ...order,
+        pay_status: pay.status,
         items: toItems(order.items),
         phone,
         chat_name: chatName,
