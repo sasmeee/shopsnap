@@ -1,6 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  ChartColumn,
+  Clock,
+  ScanLine,
+  ShieldCheck,
+  Upload,
+  Users,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -11,12 +20,23 @@ import { useModelSetup } from "@/hooks/useModelSetup";
 import { ReportView } from "@/components/ReportView";
 import { CustomerList } from "@/components/CustomerList";
 
+function Logo() {
+  return (
+    <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+      <ScanLine className="size-5" aria-hidden="true" />
+    </span>
+  );
+}
+
 function Gate({ children }: { children: React.ReactNode }) {
   return (
     <main className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>ShopSnap</CardTitle>
+          <div className="flex items-center gap-3">
+            <Logo />
+            <CardTitle className="font-heading text-lg">ShopSnap</CardTitle>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4 text-sm">{children}</CardContent>
       </Card>
@@ -90,36 +110,72 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl p-6">
-      <h1 className="text-2xl font-semibold">ShopSnap</h1>
-      <p className="mb-6 text-sm text-muted-foreground">
-        Turn WhatsApp order screenshots into a daily sales report. Runs on your
-        PC.
-      </p>
-      <Tabs value={tab} onValueChange={setTab}>
-        <TabsList>
-          <TabsTrigger value="upload">Upload</TabsTrigger>
-          <TabsTrigger value="pending">
-            Pending{pending > 0 ? ` (${pending})` : ""}
-          </TabsTrigger>
-          <TabsTrigger value="report">Report</TabsTrigger>
-          <TabsTrigger value="customers">Customers</TabsTrigger>
-        </TabsList>
+    <>
+      <header className="border-b bg-background">
+        <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-4">
+          <div className="flex items-center gap-3">
+            <Logo />
+            <div>
+              <h1 className="font-heading text-lg leading-tight font-semibold">
+                ShopSnap
+              </h1>
+              <p className="text-xs text-muted-foreground">
+                WhatsApp orders to a daily report
+              </p>
+            </div>
+          </div>
+          <Badge variant="secondary" className="gap-1">
+            <ShieldCheck className="size-3.5" aria-hidden="true" />
+            Runs on this PC
+          </Badge>
+        </div>
+      </header>
 
-        {/* keepMounted: switching tabs must not wipe orders under review */}
-        <TabsContent value="upload" keepMounted className="pt-4">
-          <UploadPanel />
-        </TabsContent>
-        <TabsContent value="pending" className="pt-4">
-          <PendingList onChanged={setPending} />
-        </TabsContent>
-        <TabsContent value="report" className="pt-4">
-          <ReportView />
-        </TabsContent>
-        <TabsContent value="customers" className="pt-4">
-          <CustomerList />
-        </TabsContent>
-      </Tabs>
-    </main>
+      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-6">
+        <Tabs value={tab} onValueChange={setTab}>
+          <TabsList className="h-10">
+            <TabsTrigger value="upload" className="px-3">
+              <Upload aria-hidden="true" />
+              Upload
+            </TabsTrigger>
+            <TabsTrigger value="pending" className="px-3">
+              <Clock aria-hidden="true" />
+              Pending
+              {pending > 0 && (
+                <span className="rounded-full bg-primary px-1.5 text-[11px] leading-5 text-primary-foreground">
+                  {pending}
+                </span>
+              )}
+            </TabsTrigger>
+            <TabsTrigger value="report" className="px-3">
+              <ChartColumn aria-hidden="true" />
+              Report
+            </TabsTrigger>
+            <TabsTrigger value="customers" className="px-3">
+              <Users aria-hidden="true" />
+              Customers
+            </TabsTrigger>
+          </TabsList>
+
+          {/* keepMounted: switching tabs must not wipe orders under review */}
+          <TabsContent value="upload" keepMounted className="pt-4">
+            <UploadPanel />
+          </TabsContent>
+          <TabsContent value="pending" className="pt-4">
+            <PendingList onChanged={setPending} />
+          </TabsContent>
+          <TabsContent value="report" className="pt-4">
+            <ReportView />
+          </TabsContent>
+          <TabsContent value="customers" className="pt-4">
+            <CustomerList />
+          </TabsContent>
+        </Tabs>
+      </main>
+
+      <footer className="mx-auto w-full max-w-5xl px-6 py-6 text-xs text-muted-foreground">
+        Your orders and customer numbers stay on this computer.
+      </footer>
+    </>
   );
 }

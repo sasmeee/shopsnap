@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -103,44 +104,48 @@ export function CustomerList() {
       )}
 
       {rows !== null && rows.length > 0 && (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Phone</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Saved chat names</TableHead>
-              <TableHead className="text-right">Orders</TableHead>
-              <TableHead className="text-right">Total</TableHead>
-              <TableHead className="text-right">Balance</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {rows.map((c) => (
-              <TableRow key={c.phone}>
-                <TableCell className="font-medium">{c.phone}</TableCell>
-                <TableCell>
-                  <NicknameCell
-                    key={`${c.phone}-${c.nickname ?? ""}`}
-                    customer={c}
-                    onSaved={load}
-                  />
-                </TableCell>
-                <TableCell className="text-sm text-muted-foreground">
-                  {c.aliases ?? "-"}
-                </TableCell>
-                <TableCell className="text-right">{c.orders}</TableCell>
-                <TableCell className="text-right">
-                  {formatRs(c.total)}
-                </TableCell>
-                <TableCell
-                  className={`text-right ${c.balance > 0 ? "font-medium text-destructive" : ""}`}
-                >
-                  {formatRs(c.balance)}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <Card>
+          <CardContent className="py-2">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Phone</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Saved chat names</TableHead>
+                  <TableHead className="text-right">Orders</TableHead>
+                  <TableHead className="text-right">Total</TableHead>
+                  <TableHead className="text-right">Balance</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {rows.map((c) => (
+                  <TableRow key={c.phone}>
+                    <TableCell className="font-medium">{c.phone}</TableCell>
+                    <TableCell>
+                      <NicknameCell
+                        key={`${c.phone}-${c.nickname ?? ""}`}
+                        customer={c}
+                        onSaved={load}
+                      />
+                    </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {c.aliases ?? "-"}
+                    </TableCell>
+                    <TableCell className="text-right">{c.orders}</TableCell>
+                    <TableCell className="text-right">
+                      {formatRs(c.total)}
+                    </TableCell>
+                    <TableCell
+                      className={`text-right ${c.balance > 0 ? "font-medium text-destructive" : ""}`}
+                    >
+                      {formatRs(c.balance)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
       )}
     </div>
   );

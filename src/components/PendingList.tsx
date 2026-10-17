@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { formatRs } from "@/lib/messages";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -217,14 +218,21 @@ export function PendingList({
 
   return (
     <div className="space-y-3">
+      <p className="text-sm text-muted-foreground">
+        These chats showed a name but no number. Assign a phone once and
+        ShopSnap remembers the name for next time.
+      </p>
       {groups.map((g) => (
         <Card key={g.name}>
           <CardContent className="flex items-center justify-between gap-4 py-4">
             <div>
               <div className="font-medium">{g.name}</div>
               <div className="text-sm text-muted-foreground">
-                {g.orders} order{g.orders === 1 ? "" : "s"} · Rs {g.total} ·
-                balance Rs {g.balance} · {g.first_date}
+                {g.orders} order{g.orders === 1 ? "" : "s"} ·{" "}
+                {formatRs(g.total)}
+                {g.balance > 0
+                  ? ` · owes ${formatRs(g.balance)}`
+                  : " · paid"} · {g.first_date}
                 {g.last_date !== g.first_date ? ` to ${g.last_date}` : ""}
               </div>
             </div>

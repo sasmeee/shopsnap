@@ -30,7 +30,7 @@ export default function RootLayout({
         manropeHeading.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="flex min-h-full flex-col bg-muted/40">
         {children}
         <Toaster richColors />
       </body>

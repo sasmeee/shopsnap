@@ -1,6 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import {
+  CircleAlert,
+  CircleCheck,
+  Wallet,
+  type LucideIcon,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,16 +36,27 @@ function Stat({
   label,
   value,
   tone,
+  icon: Icon,
 }: {
   label: string;
   value: string;
   tone?: string;
+  icon: LucideIcon;
 }) {
   return (
     <Card>
-      <CardContent className="py-4">
-        <div className="text-xs text-muted-foreground">{label}</div>
-        <div className={`text-2xl font-semibold ${tone ?? ""}`}>{value}</div>
+      <CardContent className="flex items-start justify-between gap-3 py-4">
+        <div>
+          <div className="text-xs text-muted-foreground">{label}</div>
+          <div
+            className={`mt-1 text-2xl font-semibold tracking-tight ${tone ?? ""}`}
+          >
+            {value}
+          </div>
+        </div>
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
+          <Icon className="size-4" aria-hidden="true" />
+        </span>
       </CardContent>
     </Card>
   );
@@ -197,16 +214,23 @@ export function ReportView() {
             <Stat
               label={`Total sales (${report.totals.orders} orders)`}
               value={formatRs(report.totals.sales)}
+              icon={Wallet}
             />
             <Stat
               label="Paid"
               value={formatRs(report.totals.paid)}
               tone="text-emerald-700 dark:text-emerald-400"
+              icon={CircleCheck}
             />
             <Stat
               label="Unpaid"
               value={formatRs(report.totals.unpaid)}
-              tone="text-red-700 dark:text-red-400"
+              tone={
+                report.totals.unpaid > 0
+                  ? "text-red-700 dark:text-red-400"
+                  : undefined
+              }
+              icon={CircleAlert}
             />
           </div>
 

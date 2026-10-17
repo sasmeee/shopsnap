@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { ImageUp } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ import {
 import { normalizePhone } from "@/lib/phone";
 import { validateOrder } from "@/lib/chat";
 import { todayLocal } from "@/lib/date";
+import { cn } from "@/lib/utils";
 
 type Pay = "paid" | "unpaid" | "partial";
 type Item = { name: string; qty: number; price: number };
@@ -431,22 +433,27 @@ export function UploadPanel() {
             onChange={(e) => setDate(e.target.value)}
           />
         </label>
-        <p className="text-sm text-muted-foreground">
-          Include the top of the chat, with the name or number, in each
-          screenshot.
-        </p>
       </div>
 
       <div
         {...getRootProps()}
-        className={`cursor-pointer rounded-lg border-2 border-dashed p-8 text-center text-sm ${
-          isDragActive ? "border-primary bg-primary/5" : "border-border"
-        }`}
+        className={cn(
+          "flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed bg-card px-6 py-10 text-center transition-colors hover:border-primary/60 hover:bg-primary/5",
+          isDragActive ? "border-primary bg-primary/5" : "border-border",
+        )}
       >
         <input {...getInputProps()} />
-        {isDragActive
-          ? "Drop screenshots here"
-          : "Drag screenshots here, or click to choose"}
+        <span className="flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary">
+          <ImageUp className="size-5" aria-hidden="true" />
+        </span>
+        <p className="text-sm font-medium">
+          {isDragActive
+            ? "Drop screenshots here"
+            : "Drag screenshots here, or click to choose"}
+        </p>
+        <p className="text-xs text-muted-foreground">
+          PNG or JPG. Include the top of the chat, with the name or number.
+        </p>
       </div>
 
       {busy && (
