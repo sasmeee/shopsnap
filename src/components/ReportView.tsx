@@ -27,7 +27,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ListPagination } from "@/components/ListPagination";
 import { StatusBadge } from "@/components/StatusBadge";
+import { usePagination } from "@/hooks/usePagination";
 import { todayLocal } from "@/lib/date";
 import { followUpMessage, formatRs } from "@/lib/messages";
 import type { Report, ReportOrder } from "@/lib/report";
@@ -140,6 +142,8 @@ export function ReportView() {
   const [report, setReport] = useState<Report | null>(null);
   const [failed, setFailed] = useState(false);
   const [part, setPart] = useState<ReportOrder | null>(null);
+  const unpaidPaging = usePagination(report?.unpaid ?? []);
+  const customerPaging = usePagination(report?.customers ?? []);
 
   const load = useCallback(async () => {
     try {
@@ -190,7 +194,12 @@ export function ReportView() {
           type="date"
           className="w-44"
           value={date}
-          onChange={(e) => e.target.value && setDate(e.target.value)}
+          onChange={(e) => {
+            if (!e.target.value) return;
+            setDate(e.target.value);
+            unpaidPaging.reset();
+            customerPaging.reset();
+          }}
         />
       </label>
 
@@ -244,7 +253,7 @@ export function ReportView() {
                   Everyone has paid for this day.
                 </p>
               )}
-              {report.unpaid.map((o) => (
+              {unpaidPaging.pageItems.map((o) => (
                 <div
                   key={o.id}
                   className="flex flex-wrap items-center justify-between gap-3 border-t pt-3 first:border-t-0 first:pt-0"
@@ -280,6 +289,11 @@ export function ReportView() {
                   </div>
                 </div>
               ))}
+              <ListPagination
+                page={unpaidPaging.page}
+                totalPages={unpaidPaging.totalPages}
+                onPageChange={unpaidPaging.setPage}
+              />
             </CardContent>
           </Card>
 
@@ -299,7 +313,7 @@ export function ReportView() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {report.customers.map((c) => (
+                  {customerPaging.pageItems.map((c) => (
                     <TableRow key={c.key}>
                       <TableCell>
                         <div className="font-medium">{c.label}</div>
@@ -323,6 +337,11 @@ export function ReportView() {
                   ))}
                 </TableBody>
               </Table>
+              <ListPagination
+                page={customerPaging.page}
+                totalPages={customerPaging.totalPages}
+                onPageChange={customerPaging.setPage}
+              />
             </CardContent>
           </Card>
         </>

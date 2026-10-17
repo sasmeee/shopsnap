@@ -29,7 +29,7 @@ export function useModelSetup() {
       const res = await fetch("/api/model", { method: "POST" });
       if (!res.ok || !res.body) throw new Error("download failed");
 
-      // Already installed: plain JSON, no stream.
+      // installed models return plain json.
       if (
         (res.headers.get("content-type") ?? "").includes("application/json")
       ) {
@@ -93,13 +93,13 @@ export function useModelSetup() {
     }
   }, [download]);
 
-  // First check on page load.
+  // check once when the page loads.
   useEffect(() => {
     const t = setTimeout(() => void check(), 0);
     return () => clearTimeout(t);
   }, [check]);
 
-  // While Ollama is down, quietly retry every 3 seconds.
+  // retry every three seconds while ollama is down.
   useEffect(() => {
     if (state.phase !== "no-ollama") return;
     const i = setInterval(() => void check(), 3000);

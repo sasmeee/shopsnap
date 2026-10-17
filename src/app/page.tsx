@@ -157,7 +157,6 @@ export default function Home() {
             </TabsTrigger>
           </TabsList>
 
-          {/* keepMounted: switching tabs must not wipe orders under review */}
           <TabsContent value="upload" keepMounted className="pt-4">
             <UploadPanel />
           </TabsContent>

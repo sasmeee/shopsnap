@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ListPagination } from "@/components/ListPagination";
+import { usePagination } from "@/hooks/usePagination";
 import { normalizePhone } from "@/lib/phone";
 
 type Group = {
@@ -183,6 +185,8 @@ export function PendingList({
 }) {
   const [groups, setGroups] = useState<Group[] | null>(null);
   const [active, setActive] = useState<Group | null>(null);
+  // keep this hook above the early returns.
+  const { pageItems, page, totalPages, setPage } = usePagination(groups ?? []);
 
   const load = useCallback(async () => {
     try {
@@ -222,7 +226,7 @@ export function PendingList({
         These chats showed a name but no number. Assign a phone once and
         ShopSnap remembers the name for next time.
       </p>
-      {groups.map((g) => (
+      {pageItems.map((g) => (
         <Card key={g.name}>
           <CardContent className="flex items-center justify-between gap-4 py-4">
             <div>
@@ -240,6 +244,11 @@ export function PendingList({
           </CardContent>
         </Card>
       ))}
+      <ListPagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+      />
       <AssignDialog
         group={active}
         onClose={() => setActive(null)}

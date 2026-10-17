@@ -30,8 +30,8 @@ export async function POST(req: NextRequest) {
   const original = Buffer.from(await file.arrayBuffer());
   const hash = crypto.createHash("sha256").update(original).digest("hex");
 
-  // Same screenshot already saved: skip the slow AI read.
-  // The "Read again" button sends force=1 to bypass this.
+  // skip ai when this screenshot is already saved.
+  // force=1 reads it again.
   if (form.get("force") !== "1" && hashExists(hash)) {
     return NextResponse.json({ duplicate: true, hash });
   }

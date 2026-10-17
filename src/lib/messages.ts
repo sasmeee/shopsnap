@@ -4,7 +4,7 @@ export function formatRs(n: number): string {
   return `Rs ${n.toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
 }
 
-// Plain template, no AI. Owner copies it and pastes it into WhatsApp.
+// build a message the owner can paste into whatsapp.
 export function followUpMessage(o: {
   name: string;
   order_date: string;

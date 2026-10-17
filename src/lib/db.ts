@@ -40,7 +40,7 @@ function open(): Database.Database {
   return db;
 }
 
-// One connection, survives dev hot reload.
+// keep one connection during dev hot reloads.
 const g = globalThis as unknown as { __shopsnapDb?: Database.Database };
 
 export function getDb(): Database.Database {
@@ -48,7 +48,7 @@ export function getDb(): Database.Database {
   return g.__shopsnapDb;
 }
 
-// Same rule everywhere: trim, lowercase, collapse spaces.
+// normalize names the same way everywhere.
 export function normName(s: string): string {
   return s.trim().toLowerCase().replace(/\s+/g, " ");
 }
@@ -106,7 +106,7 @@ export function saveOrders(orders: NewOrder[]): {
   return { saved, duplicates };
 }
 
-// True if any order from this screenshot is already saved.
+// check whether this screenshot was already saved.
 export function hashExists(hash: string): boolean {
   const row = getDb()
     .prepare("SELECT 1 FROM orders WHERE source_hash = ? LIMIT 1")
@@ -166,8 +166,7 @@ export function getPendingGroups(): PendingGroup[] {
   return [...map.values()];
 }
 
-// Attach all pending orders with this name to a phone.
-// Creates the customer if new and remembers name -> phone.
+// assign pending orders to a phone and save the name alias.
 export function assignPending(name: string, phone: string): number {
   const db = getDb();
   const key = normName(name);

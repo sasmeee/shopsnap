@@ -104,7 +104,7 @@ export function getReport(date: string): Report {
   };
 }
 
-// Add a payment to one order. "full" pays the whole balance.
+// record a payment for one order.
 export function recordPayment(
   id: number,
   payment: number | "full",

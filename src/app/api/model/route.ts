@@ -4,13 +4,13 @@ import { OLLAMA_URL, getModelStatus } from "@/lib/models";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// Is Ollama running, and are the required models installed?
+// check ollama and the required models.
 export async function GET() {
   const { ollama, missing } = await getModelStatus();
   return NextResponse.json({ ollama, ready: ollama && missing.length === 0 });
 }
 
-// Downloads every missing model. Streams Ollama progress as NDJSON.
+// download missing models and stream progress.
 export async function POST() {
   const { ollama, missing } = await getModelStatus();
   if (!ollama) {

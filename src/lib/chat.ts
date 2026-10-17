@@ -23,8 +23,7 @@ export function toItems(raw: RawItem[]): Item[] {
   }));
 }
 
-// Every amount the model returns must appear in the transcript.
-// Catches invented numbers that still add up.
+// make sure returned amounts appear in the transcript.
 export function checkGrounded(
   transcript: string,
   o: { total: number; items: RawItem[] },
@@ -71,8 +70,7 @@ export function validateOrder(o: Checkable): string[] {
 
 type PayStatus = "paid" | "unpaid" | "partial" | "unknown";
 
-// Never trust "paid" from a small model without proof in the chat text.
-// Only overrides when the text has exactly one kind of signal.
+// trust paid status only when the chat text supports it.
 export function checkPayStatus(
   transcript: string,
   status: PayStatus,

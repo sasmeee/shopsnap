@@ -12,6 +12,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ListPagination } from "@/components/ListPagination";
+import { usePagination } from "@/hooks/usePagination";
 import { formatRs } from "@/lib/messages";
 
 type Customer = {
@@ -67,6 +69,9 @@ function NicknameCell({
 export function CustomerList() {
   const [q, setQ] = useState("");
   const [rows, setRows] = useState<Customer[] | null>(null);
+  const { pageItems, page, totalPages, setPage, reset } = usePagination(
+    rows ?? [],
+  );
 
   const load = useCallback(async () => {
     try {
@@ -88,7 +93,10 @@ export function CustomerList() {
       <Input
         placeholder="Search by name or number"
         value={q}
-        onChange={(e) => setQ(e.target.value)}
+        onChange={(e) => {
+          setQ(e.target.value);
+          reset();
+        }}
         className="max-w-sm"
       />
 
@@ -118,7 +126,7 @@ export function CustomerList() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {rows.map((c) => (
+                {pageItems.map((c) => (
                   <TableRow key={c.phone}>
                     <TableCell className="font-medium">{c.phone}</TableCell>
                     <TableCell>
@@ -144,6 +152,11 @@ export function CustomerList() {
                 ))}
               </TableBody>
             </Table>
+            <ListPagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
           </CardContent>
         </Card>
       )}
