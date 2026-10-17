@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UploadPanel } from "@/components/UploadPanel";
 import { PendingList } from "@/components/PendingList";
 import { useModelSetup } from "@/hooks/useModelSetup";
+import { ReportView } from "@/components/ReportView";
 
 function Gate({ children }: { children: React.ReactNode }) {
   return (
@@ -111,11 +112,8 @@ export default function Home() {
         <TabsContent value="pending" className="pt-4">
           <PendingList onChanged={setPending} />
         </TabsContent>
-        <TabsContent
-          value="report"
-          className="pt-4 text-sm text-muted-foreground"
-        >
-          Coming next.
+        <TabsContent value="report" className="pt-4">
+          <ReportView />
         </TabsContent>
         <TabsContent
           value="customers"
